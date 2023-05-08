@@ -34,6 +34,8 @@ public class OrderItem {
     @Column(nullable = false)
     private Integer quantity;
 
+    private String size;
+
     @CreationTimestamp
     private Timestamp createdAt;
 

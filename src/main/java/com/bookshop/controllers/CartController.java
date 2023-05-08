@@ -5,10 +5,7 @@ import com.bookshop.dao.*;
 import com.bookshop.dto.OrderItemDTO;
 import com.bookshop.exceptions.AppException;
 import com.bookshop.exceptions.NotFoundException;
-import com.bookshop.services.DeliveryService;
-import com.bookshop.services.OrderItemService;
-import com.bookshop.services.ProductService;
-import com.bookshop.services.SaleOrderService;
+import com.bookshop.services.*;
 import com.bookshop.specifications.GenericSpecification;
 import com.bookshop.specifications.SearchCriteria;
 import com.bookshop.specifications.SearchOperation;
@@ -39,6 +36,9 @@ public class CartController extends BaseController<Object> {
     @Autowired
     private DeliveryService deliveryService;
 
+    @Autowired
+    private SizeProductService sizeProductService;
+
     @GetMapping
     @PreAuthorize("@userAuthorizer.isMember(authentication)")
     public ResponseEntity<?> getOrderItemsOfCart(HttpServletRequest request) {
@@ -65,10 +65,14 @@ public class CartController extends BaseController<Object> {
         if (product == null) {
             throw new NotFoundException("Không tìm thấy sản phẩm");
         }
+//
+//        if (product.getCurrentNumber() < orderItemDTO.getQuantity()) {
+//            throw new AppException("Số lượng không đủ");
+//        }
 
-        if (product.getCurrentNumber() < orderItemDTO.getQuantity()) {
-            throw new AppException("Số lượng không đủ");
-        }
+        Long quantitySize = sizeProductService.getQuantityProductBySizeAndProductId(orderItemDTO.getSize(), orderItemDTO.getProductId());
+        if(orderItemDTO.getQuantity() > quantitySize)
+            throw new NotFoundException("Size này không đủ số lượng");
 
         Delivery delivery = deliveryService.findByAddedToCartState();
 
@@ -94,6 +98,7 @@ public class CartController extends BaseController<Object> {
                 OrderItem orderItem = new OrderItem();
                 orderItem.setSaleOrder(oldSaleOrder);
                 orderItem.setProduct(product);
+                orderItem.setSize(oldOrderItem.getSize());
                 orderItem.setQuantity(orderItemDTO.getQuantity());
                 newOrderItem = orderItemService.createOrUpdate(orderItem);
             }
@@ -113,6 +118,7 @@ public class CartController extends BaseController<Object> {
         OrderItem orderItem = new OrderItem();
         orderItem.setSaleOrder(newSaleOrder);
         orderItem.setProduct(product);
+        orderItem.setSize(orderItemDTO.getSize());
         orderItem.setQuantity(orderItemDTO.getQuantity());
 
         OrderItem newOrderItem = orderItemService.createOrUpdate(orderItem);

@@ -8,10 +8,7 @@ import com.bookshop.dto.DeliveryDTO;
 import com.bookshop.dto.pagination.PaginateDTO;
 import com.bookshop.exceptions.AppException;
 import com.bookshop.exceptions.NotFoundException;
-import com.bookshop.services.DeliveryService;
-import com.bookshop.services.ProductService;
-import com.bookshop.services.SaleOrderService;
-import com.bookshop.services.UserService;
+import com.bookshop.services.*;
 import com.bookshop.specifications.GenericSpecification;
 import com.bookshop.specifications.SearchCriteria;
 import com.bookshop.specifications.SearchOperation;
@@ -48,6 +45,8 @@ public class SaleOrderController extends BaseController<SaleOrder> {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private SizeProductService sizeProductService;
     @GetMapping
     @PreAuthorize("@userAuthorizer.isMember(authentication)")
     public ResponseEntity<?> getListSaleOrdersForMember(
@@ -190,12 +189,15 @@ public class SaleOrderController extends BaseController<SaleOrder> {
             throw new NotFoundException("Chi tiết đơn hàng không có sẵn");
         }
 
+        Long quantity  = 0L;
+
         List<OrderItem> orderItems = saleOrder.getOrderItems();
 
         for (int i = 0; i < orderItems.size(); i++) {
             Product product = orderItems.get(i).getProduct();
-            if (product.getCurrentNumber() < orderItems.get(i).getQuantity()) {
-                throw new AppException("Số lượng không đủ");
+            quantity = sizeProductService.getQuantityProductBySizeAndProductId(orderItems.get(i).getSize(), orderItems.get(i).getProduct().getId());
+            if (quantity < orderItems.get(i).getQuantity()) {
+                throw new AppException("Số lượng của size này không đủ");
             }
         }
 
@@ -208,8 +210,11 @@ public class SaleOrderController extends BaseController<SaleOrder> {
         for (int i = 0; i < orderItems.size(); i++) {
             Product product = orderItems.get(i).getProduct();
             product.setQuantityPurchased(product.getQuantityPurchased() + orderItems.get(i).getQuantity());
-            product.setCurrentNumber(product.getCurrentNumber() - orderItems.get(i).getQuantity());
+//            product.setCurrentNumber(product.getCurrentNumber() - orderItems.get(i).getQuantity());
+            SizeProduct sizeProduct = sizeProductService.getSizeProductByProductIdAndSize(product.getId(), orderItems.get(i).getSize());
+            sizeProduct.setQuantity(sizeProduct.getQuantity()-orderItems.get(i).getQuantity());
             productService.update(product);
+            sizeProductService.update(sizeProduct);
         }
 
         requestedUser.setAmount(requestedUser.getAmount() - totalAmount);
@@ -252,8 +257,11 @@ public class SaleOrderController extends BaseController<SaleOrder> {
 
         for (OrderItem orderItem : orderItems) {
             Product product = orderItem.getProduct();
+            SizeProduct sizeProduct = sizeProductService.getSizeProductByProductIdAndSize(product.getId(), orderItem.getSize());
             product.setCurrentNumber(product.getCurrentNumber() + orderItem.getQuantity());
+            sizeProduct.setQuantity(sizeProduct.getQuantity() + orderItem.getQuantity());
             productService.update(product);
+            sizeProductService.update(sizeProduct);
         }
 
         SaleOrder newSaleOrder = saleOrderService.update(saleOrder);

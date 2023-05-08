@@ -3,7 +3,7 @@ version: "3"
 services:
   # postgres
   postgresql:
-    container_name: bookshop-db
+    container_name: store-db
     image: postgres:latest
     ports:
       - "5432:5432"
@@ -15,7 +15,7 @@ services:
       - "bookshop-db:/var/lib/postgresql/data"
   # bookshop-server
   bookshop-server:
-    container_name: bookshop-server
+    container_name: store-server
     build:
       context: .
       dockerfile: Dockerfile

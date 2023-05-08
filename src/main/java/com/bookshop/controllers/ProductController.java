@@ -158,7 +158,7 @@ public class ProductController extends BaseController<Product> {
             throw new NotFoundException("Sản phẩm không tồn tại");
         }
 
-        if (!product.getProductImages().isEmpty() || !product.getProductRates().isEmpty() || !product.getOrderItems().isEmpty()) {
+        if (!product.getProductRates().isEmpty() || !product.getOrderItems().isEmpty()) {
             throw new AppException("Không thể xóa sản phẩm này");
         }
 

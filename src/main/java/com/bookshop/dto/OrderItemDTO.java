@@ -20,4 +20,7 @@ public class OrderItemDTO {
     @NotNull
     @Min(1)
     private Integer quantity;
+
+    @NotNull(message = "sản phẩm không được để trống")
+    private String size;
 }

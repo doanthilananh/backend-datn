@@ -8,7 +8,7 @@ springdoc:
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/datn
+    url: jdbc:postgresql://localhost:5432/postgres
     username: postgres
     password: 26113012a
   data:
@@ -51,6 +51,6 @@ user:
   password: "26113012a"
   address: "quang nih"
   amount: 10
-  role: "Admin"
+  role: "ADMIN"
   email: "birtday11111@gmail.com"
   phone: "0366754936"
