@@ -48,15 +48,29 @@ public class ProductController extends BaseController<Product> {
     @Autowired
     private StorageService storageService;
 
+    @GetMapping("size")
+    @PreAuthorize("@userAuthorizer.isAdmin(authentication)")
+    @SecurityRequirement(name = "Authorization")
+    private ResponseEntity<?> getSizeProducts(  @RequestParam(name = "page", required = false) Integer page,
+                                                @RequestParam(name = "perPage", required = false) Integer perPage,
+                                                @RequestParam(name = "category", required = false) String category,
+                                                HttpServletRequest request
+                                                ){
+        GenericSpecification<Product> specification = new GenericSpecification<Product>().getBasicQuery(request);
+       return null;
+    }
     @GetMapping
     public ResponseEntity<?> getListProducts(
             @RequestParam(name = "page", required = false) Integer page,
             @RequestParam(name = "perPage", required = false) Integer perPage,
             @RequestParam(name = "productType", required = false) String productType,
             @RequestParam(name = "ids", required = false) List<Integer> ids,
+            @RequestParam(name = "category", required = false) String category,
             HttpServletRequest request) {
 
         GenericSpecification<Product> specification = new GenericSpecification<Product>().getBasicQuery(request);
+        if(category != null)
+            specification.buildJoin(new JoinCriteria(SearchOperation.EQUAL, "category", "name", category, JoinType.INNER));
 
         if (productType != null) {
             if (productType.equals(ProductTypeEnum.HAVE_IMAGE)) {

@@ -7,14 +7,16 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.Nationalized;
-import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.annotations.*;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "products")
@@ -78,6 +80,10 @@ public class Product {
     @UpdateTimestamp
     private Timestamp updatedAt;
 
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @JsonManagedReference
+    private Set<SizeProduct> sizeProducts;
     @PrePersist
     public void PrePersist() {
         if (this.quantityPurchased == null) {
