@@ -86,7 +86,7 @@ public class CartController extends BaseController<Object> {
             GenericSpecification<OrderItem> orderItemGenericSpecification = new GenericSpecification<>();
             orderItemGenericSpecification.add(new SearchCriteria("saleOrder", oldSaleOrder.getId(), SearchOperation.EQUAL));
             orderItemGenericSpecification.add(new SearchCriteria("product", product.getId(), SearchOperation.EQUAL));
-
+            orderItemGenericSpecification.add(new SearchCriteria("size", orderItemDTO.getSize(), SearchOperation.EQUAL));
             OrderItem oldOrderItem = orderItemService.findOne(orderItemGenericSpecification);
 
             OrderItem newOrderItem;
@@ -98,7 +98,7 @@ public class CartController extends BaseController<Object> {
                 OrderItem orderItem = new OrderItem();
                 orderItem.setSaleOrder(oldSaleOrder);
                 orderItem.setProduct(product);
-                orderItem.setSize(oldOrderItem.getSize());
+                orderItem.setSize(orderItemDTO.getSize());
                 orderItem.setQuantity(orderItemDTO.getQuantity());
                 newOrderItem = orderItemService.createOrUpdate(orderItem);
             }
