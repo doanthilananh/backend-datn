@@ -20,7 +20,7 @@ import org.springframework.web.filter.CharacterEncodingFilter;
 @Slf4j
 @SpringBootApplication
 @EnableConfigurationProperties({StorageProperties.class, UserInfoProperties.class, MailInfoProperties.class})
-public class BookShopServerApplication {
+public class StoreShopServerApplication {
 
     @Autowired
     private ModelMapper mapper;
@@ -32,7 +32,7 @@ public class BookShopServerApplication {
     private DeliveryService deliveryService;
 
     public static void main(String[] args) {
-        SpringApplication.run(BookShopServerApplication.class, args);
+        SpringApplication.run(StoreShopServerApplication.class, args);
     }
 
     @Bean

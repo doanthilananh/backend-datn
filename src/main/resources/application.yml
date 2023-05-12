@@ -35,8 +35,8 @@ jwt:
   time_expiration: 86400000
 
 mail:
-  username: "birtday11111@gmail.com"
-  password: "26113012a"
+  username: "ha.levan@vti.com.vn"
+  password: "xiwkamdbdhlzqbor"
 
 cloudinary:
   url: "${CLOUDINARY_URL"

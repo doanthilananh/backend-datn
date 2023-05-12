@@ -78,6 +78,9 @@ public class AuthController extends BaseController<Object> {
         if (oldUser != null) {
             throw new AppException("Tài khoản này đã tồn tại");
         }
+        User emailOld = userService.findByEmail(signUpDTO.getEmail());
+        if(emailOld != null)
+            throw new AppException("Email này đã tồn tại");
         User newUser = userService.create(signUpDTO);
 
         final UserDetails userDetails = myUserDetailsService.loadUserByUsername(newUser.getUsername());

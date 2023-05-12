@@ -11,11 +11,13 @@ import com.bookshop.repositories.SizeProductRepository;
 import com.bookshop.services.SizeProductService;
 import com.bookshop.specifications.GenericSpecification;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 public class SizeProductServiceImpl extends BasePagination<SizeProduct, SizeProductRepository> implements SizeProductService {
@@ -48,7 +50,7 @@ public class SizeProductServiceImpl extends BasePagination<SizeProduct, SizeProd
     public Long getQuantityProductBySizeAndProductId(String size, Long productId) {
         SizeProduct sizeProduct = sizeProductRepository.findByProductIdAndSize(productId, size);
         if(sizeProduct == null)
-            throw new NotFoundException("Sản phẩm này không có kích thước " + size);
+            throw new NotFoundException("Bạn vui lòng chọn kích thước sản phẩm");
         if(sizeProduct.getQuantity() == 0)
             throw new NotFoundException("Size " + size + "của sản phẩm này đã hết");
         return sizeProduct.getQuantity();
@@ -73,22 +75,17 @@ public class SizeProductServiceImpl extends BasePagination<SizeProduct, SizeProd
     }
 
     @Override
-    public void addOrUpdateSizeProduct(SizeProductDTO sizeProductDTO) {
-        SizeProduct sizeProduct = sizeProductRepository.findByProductIdAndSize(sizeProductDTO.getProductId(), sizeProductDTO.getSize());
-        if(sizeProduct != null){
-            sizeProduct.setQuantity(sizeProductDTO.getQuantity());
-            sizeProductRepository.save(sizeProduct);
-        }else{
-            SizeProduct newSizeProduct = new SizeProduct();
-            Optional<Product> product = productRepository.findById(sizeProductDTO.getProductId());
-            if(product.isPresent())
-                throw new NotFoundException("Sản phẩm này không tồn tại");
-            else{
-                newSizeProduct.setProduct(product.get());
-                newSizeProduct.setQuantity(sizeProductDTO.getQuantity());
-                newSizeProduct.setSize(sizeProductDTO.getSize());
-                sizeProductRepository.save(newSizeProduct);
+    public List<SizeProduct> updateSizeProducts(SizeProductDTO sizeProductDTO) {
+        List<SizeProduct> sizeProducts = sizeProductRepository.findAllByProductId(sizeProductDTO.getProductId());
+        if(sizeProducts.isEmpty())
+            throw new NotFoundException("Sản phẩm này chưa nhập kho");
+        Map<String, SizeProduct> sizeProductMap = sizeProducts.stream().collect(Collectors.toMap(SizeProduct::getSize, Function.identity()));
+        sizeProductDTO.getSizes().forEach(size -> {
+            if(sizeProductMap.containsKey(size.getSize())){
+                sizeProductMap.get(size.getSize()).setQuantity(size.getQuantity());
+                sizeProductRepository.save(sizeProductMap.get(size.getSize()));
             }
-        }
+        });
+        return sizeProductRepository.findAllByProductId(sizeProductDTO.getProductId());
     }
 }

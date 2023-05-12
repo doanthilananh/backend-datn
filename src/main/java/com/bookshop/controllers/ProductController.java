@@ -8,6 +8,7 @@ import com.bookshop.dao.Product;
 import com.bookshop.dao.ProductImage;
 import com.bookshop.dto.ProductDTO;
 import com.bookshop.dto.ProductUpdateDTO;
+import com.bookshop.dto.SizeProductDTO;
 import com.bookshop.dto.pagination.PaginateDTO;
 import com.bookshop.exceptions.AppException;
 import com.bookshop.exceptions.NotFoundException;
@@ -51,14 +52,15 @@ public class ProductController extends BaseController<Product> {
     @GetMapping("size")
     @PreAuthorize("@userAuthorizer.isAdmin(authentication)")
     @SecurityRequirement(name = "Authorization")
-    private ResponseEntity<?> getSizeProducts(  @RequestParam(name = "page", required = false) Integer page,
-                                                @RequestParam(name = "perPage", required = false) Integer perPage,
-                                                @RequestParam(name = "category", required = false) String category,
-                                                HttpServletRequest request
-                                                ){
+    private ResponseEntity<?> getSizeProducts(@RequestParam(name = "page", required = false) Integer page,
+                                              @RequestParam(name = "perPage", required = false) Integer perPage,
+                                              @RequestParam(name = "category", required = false) String category,
+                                              HttpServletRequest request
+    ) {
         GenericSpecification<Product> specification = new GenericSpecification<Product>().getBasicQuery(request);
-       return null;
+        return null;
     }
+
     @GetMapping
     public ResponseEntity<?> getListProducts(
             @RequestParam(name = "page", required = false) Integer page,
@@ -69,7 +71,7 @@ public class ProductController extends BaseController<Product> {
             HttpServletRequest request) {
 
         GenericSpecification<Product> specification = new GenericSpecification<Product>().getBasicQuery(request);
-        if(category != null)
+        if (category != null)
             specification.buildJoin(new JoinCriteria(SearchOperation.EQUAL, "category", "name", category, JoinType.INNER));
 
         if (productType != null) {
@@ -162,6 +164,16 @@ public class ProductController extends BaseController<Product> {
         return this.resSuccess(savedProduct);
     }
 
+    @PatchMapping("/sizes/{productId}")
+//    @PreAuthorize("@userAuthorizer.isAdmin(authentication)")
+//    @SecurityRequirement(name = "Authorization")
+    public ResponseEntity<?> updateSizeProduct(@RequestBody @Valid SizeProductDTO sizeProductDTO,
+                                               @PathVariable("productId") Long productId) {
+        sizeProductDTO.setProductId(productId);
+        Product savedProduct = productService.updateSizeProduct(sizeProductDTO);
+        return this.resSuccess(savedProduct);
+    }
+
     @DeleteMapping("/{productId}")
     @PreAuthorize("@userAuthorizer.isAdmin(authentication)")
     @SecurityRequirement(name = "Authorization")
@@ -202,7 +214,7 @@ public class ProductController extends BaseController<Product> {
 
 
     @GetMapping("/sell-products")
-    public ResponseEntity<?> getAllSellProducts(){
+    public ResponseEntity<?> getAllSellProducts() {
         return this.resListSuccess(productService.getAllSellProducts());
     }
 

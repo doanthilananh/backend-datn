@@ -2,13 +2,12 @@ package com.bookshop.dto;
 
 import com.bookshop.constants.Common;
 import com.bookshop.validators.NullOrNotEmpty;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.Min;
+import java.util.ArrayList;
+import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -43,4 +42,6 @@ public class ProductUpdateDTO {
     @NullOrNotEmpty(message = "is invalid")
     @Min(1)
     private Integer numberOfPage;
+
+    private SizeProductDTO sizeProductDTO = new SizeProductDTO();
 }

@@ -16,34 +16,34 @@ import javax.validation.constraints.Pattern;
 @Getter
 @Setter
 public class SignUpDTO {
-    @NotBlank
+    @NotBlank(message = " không được để trống")
     @Length(max = Common.STRING_LENGTH_LIMIT)
     private String firstName;
 
-    @NotBlank
+    @NotBlank(message = " không được để trống")
     @Length(max = Common.STRING_LENGTH_LIMIT)
     private String lastName;
 
-    @NotBlank
+    @NotBlank(message = " không được để trống")
     @Length(max = Common.STRING_LENGTH_LIMIT)
     private String username;
 
-    @NotBlank
+    @NotBlank(message = " không được để trống")
     @Length(max = Common.STRING_LENGTH_LIMIT)
     private String address;
 
-    @NotBlank
-    @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d@$!%*#?&_]{8,}$", message = "Password is invalid")
+    @NotBlank(message = " không được để trống")
+    @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d@$!%*#?&_]{8,}$", message = ": Mật khẩu không hợp lệ")
     @Length(max = Common.STRING_LENGTH_LIMIT)
     private String password;
 
-    @NotBlank
-    @Email
+    @NotBlank(message = " không được để trống")
+    @Email(message = ": Không đúng định dạng")
     @Length(max = Common.STRING_LENGTH_LIMIT)
     private String email;
 
-    @NotBlank
-    @Pattern(regexp = "(^$|[0-9]{10})", message = "Invalid phone number")
+    @NotBlank(message = " không được để trống")
+    @Pattern(regexp = "(^$|[0-9]{10})", message = ": Số điện thoại không hợp lệ")
     @Length(max = Common.STRING_LENGTH_LIMIT)
     private String phone;
 }

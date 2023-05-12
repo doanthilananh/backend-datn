@@ -4,7 +4,6 @@ import com.bookshop.dao.SizeProduct;
 import com.bookshop.dto.SizeProductDTO;
 import com.bookshop.dto.pagination.PaginateDTO;
 import com.bookshop.specifications.GenericSpecification;
-import org.springframework.data.jpa.domain.Specification;
 
 import java.util.List;
 
@@ -19,5 +18,5 @@ public interface SizeProductService {
 
     PaginateDTO<SizeProduct> getList(Integer page, Integer perPage, GenericSpecification<SizeProduct> specification);
 
-    void addOrUpdateSizeProduct(SizeProductDTO sizeProductDTO);
+    List<SizeProduct> updateSizeProducts(SizeProductDTO sizeProductDTO);
 }

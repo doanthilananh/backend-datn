@@ -10,6 +10,7 @@ import org.hibernate.validator.constraints.Length;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -32,15 +33,18 @@ public class ProductDTO {
     @Min(1)
     private Long price;
 
-    @NotBlank
-    @Length(max = Common.STRING_LENGTH_LIMIT)
-    private String author;
+//    @NotNull
+//    private List<String> sizes;
 
-    @NotNull
-    @Min(0)
-    private Integer currentNumber;
+//    @NotBlank
+//    @Length(max = Common.STRING_LENGTH_LIMIT)
+//    private String author;
 
-    @NotNull
-    @Min(1)
-    private Integer numberOfPage;
+//    @NotNull
+//    @Min(0)
+//    private Integer currentNumber;
+
+//    @NotNull
+//    @Min(1)
+//    private Integer numberOfPage;
 }

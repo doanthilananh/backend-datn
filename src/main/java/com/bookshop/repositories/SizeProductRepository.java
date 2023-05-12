@@ -14,6 +14,8 @@ public interface SizeProductRepository extends JpaRepository<SizeProduct, Long>,
 
     SizeProduct findByProductIdAndSize(Long productId, String size);
 
+    List<SizeProduct> findByProductId(Long productId);
+
     @Query(value = "select sp.*\n" +
             "from size_products sp join products p on sp.product_id = p.id\n" +
             "join categories c on p.category_id = c.id\n" +

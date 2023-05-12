@@ -3,6 +3,7 @@ package com.bookshop.services;
 import com.bookshop.dao.Product;
 import com.bookshop.dto.ProductDTO;
 import com.bookshop.dto.ProductUpdateDTO;
+import com.bookshop.dto.SizeProductDTO;
 import com.bookshop.dto.pagination.PaginateDTO;
 import com.bookshop.specifications.GenericSpecification;
 import org.springframework.data.domain.Pageable;
@@ -30,5 +31,5 @@ public interface ProductService {
 
     List<Product> getAllSellProducts();
 
-
+    Product updateSizeProduct(SizeProductDTO sizeProductDTO);
 }
