@@ -50,7 +50,7 @@ public class SizeProductServiceImpl extends BasePagination<SizeProduct, SizeProd
     public Long getQuantityProductBySizeAndProductId(String size, Long productId) {
         SizeProduct sizeProduct = sizeProductRepository.findByProductIdAndSize(productId, size);
         if(sizeProduct == null)
-            throw new NotFoundException("Bạn vui lòng chọn kích thước sản phẩm");
+            throw new NotFoundException("Size sản phẩm không có sẵn");
         if(sizeProduct.getQuantity() == 0)
             throw new NotFoundException("Size " + size + "của sản phẩm này đã hết");
         return sizeProduct.getQuantity();

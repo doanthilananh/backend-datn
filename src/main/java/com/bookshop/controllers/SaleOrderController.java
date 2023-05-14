@@ -257,7 +257,7 @@ public class SaleOrderController extends BaseController<SaleOrder> {
         for (OrderItem orderItem : orderItems) {
             Product product = orderItem.getProduct();
             SizeProduct sizeProduct = sizeProductService.getSizeProductByProductIdAndSize(product.getId(), orderItem.getSize());
-            product.setCurrentNumber(product.getCurrentNumber() + orderItem.getQuantity());
+//            product.setCurrentNumber(product.getCurrentNumber() + orderItem.getQuantity());
             sizeProduct.setQuantity(sizeProduct.getQuantity() + orderItem.getQuantity());
             requestedUser.setAmount((orderItem.getQuantity()*orderItem.getProduct().getPrice())+ requestedUser.getAmount());
             productService.update(product);

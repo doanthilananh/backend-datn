@@ -81,7 +81,7 @@ public class ProductServiceImpl extends BasePagination<Product, ProductRepositor
         });
         product.setSizeProducts(sizeProducts);
         productRepository.save(product);
-        sizeProductRepository.saveAll(sizeProducts);
+//        sizeProductRepository.saveAll(sizeProducts);
         return product;
     }
 
