@@ -69,8 +69,10 @@ public class ProductServiceImpl extends BasePagination<Product, ProductRepositor
         Product product = mapper.map(productDTO, Product.class);
         Category category = categoryRepository.findById(productDTO.getCategoryId()).orElse(null);
         product.setCategory(category);
+        product.setCurrentNumber(100);
+        product.setNumberOfPage(100);
         productRepository.save(product);
-        List<String> sizes = List.of("XS", "S", "M", "L");
+        List<String> sizes = List.of("35", "36", "37", "38");
         Set<SizeProduct> sizeProducts = new HashSet<>();
         sizes.forEach(size -> {
             SizeProduct sizeProduct = new SizeProduct();

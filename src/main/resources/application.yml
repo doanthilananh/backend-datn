@@ -10,7 +10,7 @@ spring:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://localhost:5432/postgres
     username: postgres
-    password: 26113012a
+    password: postgres
   data:
     cassandra:
       schema-action: create_if_not_exists
@@ -45,12 +45,12 @@ storage:
   location: upload-dir
 
 user:
-  firstName: "Le Van"
-  lastName: "Ha"
-  username: "hadepchai"
+  firstName: "Doan Thi Lan"
+  lastName: "Anh"
+  username: "lanhxinhgai"
   password: "26113012a"
-  address: "quang nih"
+  address: "vinh phuc"
   amount: 10
   role: "ADMIN"
   email: "birtday11111@gmail.com"
-  phone: "0366754936"
+  phone: "0389863041"
